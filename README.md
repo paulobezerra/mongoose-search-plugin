@@ -3,6 +3,9 @@
 Simple mongoose plugin for full text search.
 Uses [natural](https://github.com/NaturalNode/natural) stemming and distance algorithms.
 
+# Update for use PorterStemmerPt
+
+
 ## Example
 ``` js
   var mongoose = require('mongoose'),
