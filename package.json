@@ -20,12 +20,12 @@
   "author": "Pavel Vlasov <freakycue@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "natural": "~0.1.25",
-    "underscore": "~1.5.2"
+    "natural": "^0.5.6",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "mocha": "~1.17.1",
-    "expect.js": "~0.2.0",
-    "mongoose": "~3.8.6"
+    "expect.js": "^0.3.1",
+    "mocha": "^5.0.5",
+    "mongoose": "^5.0.11"
   }
 }
