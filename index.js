@@ -125,8 +125,9 @@ module.exports = function (schema, options) {
         callback = _(callback).isFunction() ? callback : function () {
         };
 
-        var skip = 1;
-        var limit = 100
+        var page = 0;
+        var limit = 1;
+        var cont = 0;
 
         mongoose.Model.count.call(this, (err, count) => {
                 if (err) return callback(err)
@@ -142,10 +143,9 @@ module.exports = function (schema, options) {
 
 
                 do {
-                    mongoose.Model.find.call(this, {}, {}, {'skip': skip, 'limit': limit}, (err, docs) => {
+                    mongoose.Model.find.call(this, {}, {}, {'skip': page * limit, 'limit': limit}, (err, docs) => {
                         if (err) return callback(err);
 
-                        console.log([count, limit, skip, docs.length])
                         if (docs.length) {
                             docs.forEach(function (doc) {
                                 doc.updateKeywords();
@@ -159,8 +159,8 @@ module.exports = function (schema, options) {
                             callback();
                         }
                     });
-                    skip += limit;
-                } while (skip < count);
+                    page++;
+                } while (page * limit < count);
             }
         );
     };
