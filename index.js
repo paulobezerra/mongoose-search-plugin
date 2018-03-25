@@ -136,14 +136,15 @@ module.exports = function (schema, options) {
                 limit = count
             }
 
+            var done = _.after(count, function () {
+                callback();
+            });
+
             do {
                 mongoose.Model.find.call(this, {}, {'skip': skip, 'limit': limit}, (err, docs) => {
                     if (err) return callback(err);
 
                     if (docs.length) {
-                        var done = _.after(docs.length, function () {
-                            callback();
-                        });
                         docs.forEach(function (doc) {
                             doc.updateKeywords();
 
