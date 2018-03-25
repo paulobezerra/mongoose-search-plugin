@@ -142,7 +142,7 @@ module.exports = function (schema, options) {
 
 
                 do {
-                    mongoose.Model.find.call(this, {'skip': skip, 'limit': limit}, (err, docs) => {
+                    mongoose.Model.find.call(this, {}, {}, {'skip': skip, 'limit': limit}, (err, docs) => {
                         if (err) return callback(err);
 
                         console.log([count, limit, skip, docs.length])
