@@ -126,40 +126,43 @@ module.exports = function (schema, options) {
         };
 
         var skip = 1;
-        var limit = 100;
+        var limit = 100
 
         mongoose.Model.count.call(this, (err, count) => {
-            if (err) return callback(err)
-            if (count < 1) return callback(null)
+                if (err) return callback(err)
+                if (count < 1) return callback(null)
 
-            if (limit > count) {
-                limit = count
-            }
+                if (limit > count) {
+                    limit = count
+                }
 
-            var done = _.after(count, function () {
-                callback();
-            });
-
-            do {
-                mongoose.Model.find.call(this, {}, {'skip': skip, 'limit': limit}, (err, docs) => {
-                    if (err) return callback(err);
-
-                    if (docs.length) {
-                        docs.forEach(function (doc) {
-                            doc.updateKeywords();
-
-                            doc.save(function (err) {
-                                if (err) console.log('[mongoose search plugin err] ', err, err.stack);
-                                done();
-                            });
-                        });
-                    } else {
-                        callback();
-                    }
+                var done = _.after(count, function () {
+                    callback();
                 });
-                skip += limit;
-            } while (skip < count);
-        });
+
+
+                do {
+                    console.log([count, limit, skip])
+                    mongoose.Model.find.call(this, {}, {'skip': skip, 'limit': limit}, (err, docs) => {
+                        if (err) return callback(err);
+
+                        if (docs.length) {
+                            docs.forEach(function (doc) {
+                                doc.updateKeywords();
+
+                                doc.save(function (err) {
+                                    if (err) console.log('[mongoose search plugin err] ', err, err.stack);
+                                    done();
+                                });
+                            });
+                        } else {
+                            callback();
+                        }
+                    });
+                    skip += limit;
+                } while (skip < count);
+            }
+        );
     };
 
     schema.methods.updateKeywords = function () {
