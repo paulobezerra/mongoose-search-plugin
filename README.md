@@ -15,7 +15,11 @@ Uses [natural](https://github.com/NaturalNode/natural) stemming and distance alg
   });
 
   Schema.plugin(searchPlugin, {
-    fields: ['title', 'description', 'tags']
+    fields: [
+        {keyword: 'title', weight: 100}, 
+        {keyword: 'description', weight: 10}
+        {keyword: 'tags', weight: 1}
+    ]
   });
 
   var Model = mongoose.model('MySearchModel', Schema);
@@ -44,7 +48,7 @@ Uses [natural](https://github.com/NaturalNode/natural) stemming and distance alg
   var options = {
     keywordsPath: '_keywords', // path for keywords, `_keywords` as default
     relevancePath: '_relevance', // path for relevance number, '_relevance' as default
-    fields: [], // array of fields to use as keywords (can be String or [String] types),
+    fields: [], // array of objects to use as keywords ({keyword: String, weight: {type: Number, default: 1}),
     stemmer: 'PorterStemmer', // natural stemmer, PorterStemmer as default
     distance: 'JaroWinklerDistance' // distance algorithm, JaroWinklerDistance as default
   };

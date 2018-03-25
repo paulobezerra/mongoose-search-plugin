@@ -15,7 +15,16 @@ var TestModelSchema = mongoose.Schema({
 });
 
 TestModelSchema.plugin(plugin, {
-	fields: ['title', 'description', 'tags']
+	fields: [{
+        name: 'title',
+        weight: 100,
+    }, {
+        name: 'description',
+        weight: 10,
+    }, {
+        name: 'tags',
+        weight: 1,
+    }]
 });
 
 mongoose.model('TestModel', TestModelSchema);

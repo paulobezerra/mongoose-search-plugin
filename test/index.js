@@ -40,7 +40,7 @@ describe('search plugin', function() {
 
 	it('search should return both objects', function(done) {
 		TestModel.search('object', null, null, function(err, data) {
-			expect(err).not.to.be.ok();
+			expect(err).not.to.be.ok()
 			expect(data.results).to.be.ok();
 			expect(data.results.length).to.be.ok();
 			expect(data.results.length).to.equal(2);
