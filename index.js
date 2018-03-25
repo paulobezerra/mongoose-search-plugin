@@ -42,7 +42,7 @@ module.exports = function (schema, options) {
             outFields = {_id: 1},
             findOptions = _(options).pick('sort');
 
-        conditions[keywordsPath+".keyword"] = {$in: tokens};
+        conditions[keywordsPath + ".keyword"] = {$in: tokens};
         outFields[keywordsPath] = 1;
 
 
@@ -125,24 +125,39 @@ module.exports = function (schema, options) {
         callback = _(callback).isFunction() ? callback : function () {
         };
 
-        mongoose.Model.find.call(this, {}, function (err, docs) {
-            if (err) return callback(err);
+        var skip = 1;
+        var limit = 100;
 
-            if (docs.length) {
-                var done = _.after(docs.length, function () {
-                    callback();
-                });
-                docs.forEach(function (doc) {
-                    doc.updateKeywords();
+        mongoose.Model.count.call(this, (err, count) => {
+            if (err) return callback(err)
+            if (count < 1) return callback(null)
 
-                    doc.save(function (err) {
-                        if (err) console.log('[mongoose search plugin err] ', err, err.stack);
-                        done();
-                    });
-                });
-            } else {
-                callback();
+            if (limit > count) {
+                limit = count
             }
+
+            do {
+                mongoose.Model.find.call(this, {}, {'skip': skip, 'limit': limit}, (err, docs) => {
+                    if (err) return callback(err);
+
+                    if (docs.length) {
+                        var done = _.after(docs.length, function () {
+                            callback();
+                        });
+                        docs.forEach(function (doc) {
+                            doc.updateKeywords();
+
+                            doc.save(function (err) {
+                                if (err) console.log('[mongoose search plugin err] ', err, err.stack);
+                                done();
+                            });
+                        });
+                    } else {
+                        callback();
+                    }
+                });
+                skip += limit;
+            } while (skip < count);
         });
     };
 
