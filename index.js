@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 
 module.exports = function (schema, options) {
     var stemmer = natural[options.stemmer || 'PorterStemmer'],
-        distance = natural[options.distance || 'LevenshteinDistance'],//'JaroWinklerDistance'],
+        distance = natural[options.distance ||'JaroWinklerDistance'],
         fields = options.fields,
         keywordsPath = options.keywordsPath || '_keywords',
         relevancePath = options.relevancePath || '_relevance';
