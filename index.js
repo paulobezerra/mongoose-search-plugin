@@ -106,7 +106,7 @@ module.exports = function (schema, options) {
         }
 
         function tokenRelevance(token, resultTokens) {
-            var relevanceThreshold = 0.5,
+            var relevanceThreshold = 0.7,
                 result = 0;
 
             resultTokens.forEach(function (rToken) {
